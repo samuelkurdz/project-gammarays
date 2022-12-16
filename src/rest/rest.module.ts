@@ -3,7 +3,7 @@ import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [CompanyModule],
-  exports: [CompanyModule],
+  exports: [],
   controllers: [],
   providers: [],
 })

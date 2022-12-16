@@ -6,10 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
+import { IResponse } from '../shared';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { CompanyETY } from './entities/company.entity';
 
 @Controller('company')
 export class CompanyController {
@@ -21,8 +25,11 @@ export class CompanyController {
   }
 
   @Get()
-  findAll() {
-    return this.companyService.findAll();
+  findAll(): IResponse<CompanyETY[]> {
+    return {
+      message: '',
+      data: this.companyService.findAll(),
+    };
   }
 
   @Get(':id')
