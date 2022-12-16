@@ -1,0 +1,30 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateTeamMemberInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Mutation {
+  createTeamMember(createTeamMemberInput: CreateTeamMemberInput!): TeamMember!
+  removeTeamMember(id: Int!): TeamMember!
+  updateTeamMember(updateTeamMemberInput: UpdateTeamMemberInput!): TeamMember!
+}
+
+type Query {
+  teamMember(id: Int!): TeamMember!
+  teamMembers: [TeamMember!]!
+}
+
+type TeamMember {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateTeamMemberInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
