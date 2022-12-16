@@ -1,5 +1,5 @@
 export class CompanyETY {
-  id: string;
+  // id: string;
   companyName: string;
   category: 'education' | 'industrial' | 'community';
   logo?: string;
