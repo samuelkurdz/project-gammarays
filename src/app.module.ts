@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { RestModule } from './rest/rest.module';
 import { GraphqsModule } from './graphqs/graphqs.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './auth/auth.module';
 
 const adminCred = {
   username: 'smartAttAdmin',
@@ -16,6 +17,7 @@ const adminCred = {
     ),
     RestModule,
     GraphqsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

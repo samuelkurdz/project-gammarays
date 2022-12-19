@@ -40,6 +40,10 @@ export class CompanyService {
     return this.companyModel.findById(id).lean().exec();
   }
 
+  async findByEmail(email: string) {
+    return this.companyModel.findOne({ email }).lean().exec();
+  }
+
   async update(id: string, updateCompanyDto: UpdateCompanyDto) {
     return this.companyModel
       .findByIdAndUpdate(id, updateCompanyDto)
