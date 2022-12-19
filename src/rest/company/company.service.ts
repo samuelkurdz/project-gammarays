@@ -4,12 +4,9 @@ import { Model } from 'mongoose';
 import { Company, CompanyDocument } from './company.schema';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { CompanyETY } from './entities/company.entity';
 
 @Injectable()
 export class CompanyService {
-  companies: CompanyETY[] = [];
-
   constructor(
     @InjectModel(Company.name) private companyModel: Model<CompanyDocument>,
   ) {}
@@ -20,18 +17,21 @@ export class CompanyService {
   }
 
   async findAll() {
-    return this.companyModel.find().exec();
+    return this.companyModel.find().lean().exec();
   }
 
-  findById(id: string) {
-    return this.companyModel.findById(id).exec();
+  async findById(id: string) {
+    return this.companyModel.findById(id).lean().exec();
   }
 
-  update(id: string, updateCompanyDto: UpdateCompanyDto) {
-    return `This action updates a #${id} company`;
+  async update(id: string, updateCompanyDto: UpdateCompanyDto) {
+    return this.companyModel
+      .findByIdAndUpdate(id, updateCompanyDto)
+      .lean()
+      .exec();
   }
 
-  remove(id: string) {
-    return this.companyModel.findByIdAndDelete(id).exec();
+  async remove(id: string) {
+    return this.companyModel.findByIdAndDelete(id).lean().exec();
   }
 }

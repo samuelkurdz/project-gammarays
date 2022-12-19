@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { IResponse } from '../shared';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -23,24 +22,37 @@ export class CompanyController {
 
   @Get()
   async findAll() {
+    const companies = await this.companyService.findAll();
     return {
       message: '',
-      data: await this.companyService.findAll(),
+      data: companies,
     };
   }
 
   @Get(':id')
-  findById(@Param('id') id: string) {
-    return this.companyService.findById(id);
+  async findById(@Param('id') id: string) {
+    return {
+      message: '',
+      data: await this.companyService.findById(id),
+    };
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
-    return this.companyService.update(id, updateCompanyDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateCompanyDto: UpdateCompanyDto,
+  ) {
+    return {
+      message: '',
+      data: await this.companyService.update(id, updateCompanyDto),
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.companyService.remove(id);
+  async remove(@Param('id') id: string) {
+    return {
+      message: '',
+      data: await this.companyService.remove(id),
+    };
   }
 }
