@@ -3,6 +3,6 @@ export class CreateCompanyDto {
   category: 'education' | 'industrial' | 'community';
   logo?: string;
   officialEmail: string;
-  passwordHash: string;
+  password: string;
   shortDestription?: string;
 }

@@ -11,6 +11,9 @@ export class Company {
   @Prop({ required: true, unique: true })
   officialEmail: string;
 
+  @Prop({ required: true })
+  password: string;
+
   @Prop()
   category: 'education' | 'industrial' | 'community';
 

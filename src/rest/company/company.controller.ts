@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -16,8 +17,10 @@ export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Post()
-  create(@Body() createCompanyDto: CreateCompanyDto) {
-    return this.companyService.create(createCompanyDto);
+  async create(@Body() createCompanyDto: CreateCompanyDto) {
+    return {
+      message: await this.companyService.create(createCompanyDto),
+    };
   }
 
   @Get()
@@ -31,10 +34,15 @@ export class CompanyController {
 
   @Get(':id')
   async findById(@Param('id') id: string) {
-    return {
-      message: '',
-      data: await this.companyService.findById(id),
-    };
+    try {
+      const company = await this.companyService.findById(id);
+      return {
+        message: '',
+        data: company,
+      };
+    } catch (error) {
+      throw new NotFoundException();
+    }
   }
 
   @Patch(':id')
