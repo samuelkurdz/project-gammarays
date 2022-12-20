@@ -3,28 +3,37 @@
 # ------------------------------------------------------
 
 input CreateTeamMemberInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  company: String!
+  email: String!
+  firstName: String!
+  lastName: String!
 }
 
 type Mutation {
-  createTeamMember(createTeamMemberInput: CreateTeamMemberInput!): TeamMember!
-  removeTeamMember(id: Int!): TeamMember!
-  updateTeamMember(updateTeamMemberInput: UpdateTeamMemberInput!): TeamMember!
+  createTeamMember(createTeamMemberInput: CreateTeamMemberInput!): String!
 }
 
 type Query {
-  teamMember(id: Int!): TeamMember!
+  teamMember(_id: String!): TeamMember!
   teamMembers: [TeamMember!]!
 }
 
 type TeamMember {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  _id: String!
+  company: TeamMemberCompany!
+  createdAt: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  updatedAt: String!
 }
 
-input UpdateTeamMemberInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+type TeamMemberCompany {
+  _id: String!
+  category: String!
+  companyName: String!
+  createdAt: String!
+  logo: String!
+  shortDestription: String!
+  updatedAt: String!
 }

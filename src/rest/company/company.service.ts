@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
-import { hashPassword } from 'src/utils';
+import { Model } from 'mongoose';
+import { hashPassword } from 'src/global/utils';
 import { Company, CompanyDocument } from './company.schema';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -27,7 +27,7 @@ export class CompanyService {
       const created = await createdCompany.save();
       if (created) return 'company created successfully';
     } catch (error) {
-      return 'error occureed';
+      return 'error occured';
     }
   }
 
@@ -36,12 +36,11 @@ export class CompanyService {
   }
 
   async findById(id: string) {
-    // console.log(Types.ObjectId.isValid(id));
     return this.companyModel.findById(id).lean().exec();
   }
 
   async findByEmail(email: string) {
-    return this.companyModel.findOne({ email }).lean().exec();
+    return this.companyModel.findOne({ officialEmail: email }).lean().exec();
   }
 
   async update(id: string, updateCompanyDto: UpdateCompanyDto) {
