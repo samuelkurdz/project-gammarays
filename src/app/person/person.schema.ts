@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, ObjectId, Types } from 'mongoose';
+import { HydratedDocument, Types, ObjectId } from 'mongoose';
 import { Apps } from 'src/global';
 
-export type TeamMemberDocument = HydratedDocument<TeamMember>;
+export type PersonDocument = HydratedDocument<Person>;
 
-@Schema()
+@Schema({ _id: false })
 class AppSchema {
   @Prop()
   teams: string[];
@@ -20,7 +20,7 @@ class AppSchema {
 }
 
 @Schema({ timestamps: { createdAt: true, updatedAt: true } })
-export class TeamMember {
+export class Person {
   @Prop({ required: true })
   firstName: string;
 
@@ -33,6 +33,9 @@ export class TeamMember {
   @Prop({ required: true, default: 'password' })
   password: string;
 
+  @Prop({ required: true, type: Boolean })
+  isWorker: boolean;
+
   @Prop({ required: true, ref: 'Company', type: Types.ObjectId })
   company: ObjectId;
 
@@ -44,8 +47,9 @@ export class TeamMember {
       events: ['list-all'],
       attendance: [],
     },
+    required: true,
   })
   apps: Apps;
 }
 
-export const TeamMemberSchema = SchemaFactory.createForClass(TeamMember);
+export const PersonSchema = SchemaFactory.createForClass(Person);

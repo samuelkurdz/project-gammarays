@@ -1,28 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CompanyService } from 'src/rest/company/company.service';
+import { PersonService } from 'src/app/person/person.service';
 import { comparePassword } from 'src/global/utils';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private _companyService: CompanyService,
+    private _personService: PersonService,
     private _jwtService: JwtService,
   ) {}
 
-  async validateCompany(email: string, companyPassword: string): Promise<any> {
-    const company = await this._companyService.findByEmail(email);
-    const isMatch = await comparePassword(companyPassword, company.password);
+  async validatePerson(email: string, companyPassword: string): Promise<any> {
+    const person = await this._personService.findByEmail(email);
+    const isMatch = await comparePassword(companyPassword, person.password);
     if (!isMatch) return null;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...result } = company;
+    const { password, ...result } = person;
     return result;
   }
 
-  async login(user: any) {
-    const { officialEmail, _id } = user;
-    const payload = { email: officialEmail, sub: _id };
+  validateAuthToken(token: string) {
+    const { _id, email, isWorker, company, apps } = this._jwtService.decode(
+      token,
+      { json: true },
+    ) as any;
+
+    return { _id, email, isWorker };
+  }
+
+  async login(person: any) {
+    const { _id, email, isWorker, company, apps } = person;
+    const payload = { email, _id, isWorker, company, apps };
     return {
       access_token: this._jwtService.sign(payload),
     };
