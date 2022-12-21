@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PersonService } from 'src/app/person/person.service';
+import { PersonService } from 'src/rest/person/person.service';
 import { comparePassword } from 'src/global/utils';
 
 @Injectable()
