@@ -7,16 +7,25 @@ import {
   Param,
   Delete,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { TeamsService } from './teams.service';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
 import { LoggedInUser, Token } from 'src/global';
 import { JwtAuthGuard } from 'src/auth';
+import {
+  AbilityFactory,
+  Actions,
+  Subjects,
+} from 'src/ability/ability-factory/ability-factory';
 
 @Controller('teams')
 export class TeamsController {
-  constructor(private readonly teamsService: TeamsService) {}
+  constructor(
+    private abilityFactory: AbilityFactory,
+    private readonly teamsService: TeamsService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -31,8 +40,12 @@ export class TeamsController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(@LoggedInUser() user: Token) {
-    console.log(user);
-    return this.teamsService.findAll();
+    // console.log(user);
+    const ability = this.abilityFactory.defineAbility(user.apps);
+    const isAllowed = ability.can(Actions.Read, Subjects.Teams);
+    // console.log(isAllowed);
+    if (!isAllowed) throw new ForbiddenException('insufficient authorization');
+    return this.teamsService.findAll(user.company);
   }
 
   @UseGuards(JwtAuthGuard)

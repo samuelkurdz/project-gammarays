@@ -19,8 +19,8 @@ export class TeamsService {
     return this.personService.createPerson(false, createTeamDto);
   }
 
-  async findAll() {
-    return this.personService.findPersons(false);
+  async findAll(companyId: string) {
+    return this.personService.findPersons(false, companyId);
   }
 
   findOne(id: string) {

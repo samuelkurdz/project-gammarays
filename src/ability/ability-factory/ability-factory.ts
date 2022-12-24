@@ -5,7 +5,7 @@ import {
   ExtractSubjectType,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { Apps } from 'src/global';
+import { Apps, appsRelations } from 'src/global';
 
 export enum Actions {
   Manage = 'manage',
@@ -33,8 +33,12 @@ export class AbilityFactory {
       Ability as AbilityClass<AppAbility>,
     );
 
-    if (apps.attendance.includes('*')) {
-      can(Actions.Manage, Subjects.All);
+    if (
+      apps.teams &&
+      (apps.teams.includes(appsRelations.teams.masterAccess) ||
+        apps.teams.includes(appsRelations.teams.listAllAccess))
+    ) {
+      can(Actions.Read, Subjects.Teams);
     }
 
     return build({

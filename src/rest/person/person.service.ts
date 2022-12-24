@@ -27,7 +27,17 @@ export class PersonService {
     );
   }
 
-  async findPersons(isWorker: boolean) {
+  async findPersons(isWorker: boolean, companyId?: string) {
+    if (companyId) {
+      return this.personModel
+        .find({ isWorker: isWorker })
+        .where('company')
+        .equals(companyId)
+        .select('-password')
+        .populate('company', '-officialEmail -password -apps')
+        .lean()
+        .exec();
+    }
     return this.personModel
       .find({ isWorker: isWorker })
       .select('-password')
