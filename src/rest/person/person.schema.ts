@@ -37,7 +37,7 @@ export class Person {
   isWorker: boolean;
 
   @Prop({ required: true, ref: 'Company', type: Types.ObjectId })
-  company: ObjectId;
+  company: Types.ObjectId;
 
   @Prop({
     type: AppSchema,

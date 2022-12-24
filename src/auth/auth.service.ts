@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PersonService } from 'src/rest/person/person.service';
 import { comparePassword } from 'src/global/utils';
+import { Token } from 'src/global';
+import { Person, PersonDocument } from 'src/rest/person/person.schema';
 
 @Injectable()
 export class AuthService {
@@ -20,18 +22,19 @@ export class AuthService {
     return result;
   }
 
-  validateAuthToken(token: string) {
-    const { _id, email, isWorker, company, apps } = this._jwtService.decode(
-      token,
-      { json: true },
-    ) as any;
-
-    return { _id, email, isWorker };
+  isTokenValid(token: string) {
+    return this._jwtService.verifyAsync<Token>(token);
   }
 
-  async login(person: any) {
+  async login(person: PersonDocument) {
     const { _id, email, isWorker, company, apps } = person;
-    const payload = { email, _id, isWorker, company, apps };
+    const payload: Token = {
+      _id: _id.toString(),
+      apps,
+      email,
+      company: company.toString(),
+      isWorker,
+    };
     return {
       access_token: this._jwtService.sign(payload),
     };
