@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateTeamDto } from '../teams/dto/create-team.dto';
-import { CreateWorkerDto } from '../workers/dto/create-worker.dto';
+import { CreatePersonDTO } from './create-person.dto';
 import { Person, PersonDocument } from './person.schema';
 
 @Injectable()
@@ -13,7 +12,19 @@ export class PersonService {
   ) {}
 
   async findByEmail(email: string) {
-    return this.personModel.findOne({ officialEmail: email }).lean().exec();
+    return this.personModel.findOne({ email: email }).lean().exec();
+  }
+
+  async findById(id: string) {
+    return (
+      this.personModel
+        .findById(id)
+        // .where('isWorker')
+        // .equals(true/false)
+        .select('-password')
+        .lean()
+        .exec()
+    );
   }
 
   async findPersons(isWorker: boolean) {
@@ -25,33 +36,20 @@ export class PersonService {
       .exec();
   }
 
-  async createTeamMember(createTeamDto: CreateTeamDto) {
-    const newTeamMember = {
-      ...createTeamDto,
-      isWorker: false,
+  // create person can only be called from company, team or worker services
+  // make sure you hash password from above listed service.
+  async createPerson(isWorker: boolean, createPersonDTO: CreatePersonDTO) {
+    const newPerson = {
+      ...createPersonDTO,
+      isWorker: isWorker,
     };
 
-    const createdTeamMember = new this.personModel(newTeamMember);
+    const createdPerson = new this.personModel(newPerson);
 
     try {
-      const created = await createdTeamMember.save();
-      if (created) return 'Team-member created successfully';
-    } catch (error) {
-      return 'error occured';
-    }
-  }
-
-  async createWorker(createWorkerDto: CreateWorkerDto) {
-    const newWorker = {
-      ...createWorkerDto,
-      isWorker: true,
-    };
-
-    const createdWorker = new this.personModel(newWorker);
-
-    try {
-      const created = await createdWorker.save();
-      if (created) return 'Worker created successfully';
+      const created = await createdPerson.save();
+      if (created)
+        return `${isWorker ? 'Worker' : 'Team-member'} created successfully`;
     } catch (error) {
       return 'error occured';
     }

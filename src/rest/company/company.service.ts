@@ -41,7 +41,7 @@ export class CompanyService {
           attendance: ['*'],
         },
       };
-      await this.personService.createTeamMember(adminTeamMember);
+      await this.personService.createPerson(false, adminTeamMember);
       if (created) return 'company created successfully';
     } catch (error) {
       return 'error occured';
@@ -53,7 +53,7 @@ export class CompanyService {
   }
 
   async findById(id: string) {
-    return this.companyModel.findById(id).lean().exec();
+    return this.companyModel.findById(id).select('-password').lean().exec();
   }
 
   async findByEmail(email: string) {

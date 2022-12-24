@@ -23,7 +23,6 @@ export class AppController {
   @Post('auth/login')
   async login(@Request() req) {
     // req.user contains person info after successful find in the LocalStrategy validate
-    console.log(req.user);
     const { access_token } = await this._authService.login(req.user);
     return { user: req.user, access_token };
   }

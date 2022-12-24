@@ -1,4 +1,4 @@
-import { Apps } from 'src/global';
+import { Apps, appsRelations } from 'src/global';
 
 export class CreateWorkerDto {
   firstName: string;
@@ -8,3 +8,9 @@ export class CreateWorkerDto {
   password?: string;
   apps?: Apps;
 }
+
+export const createWorkerDefaultApps: Apps = {
+  workers: [appsRelations.workers.listWorkerAccess],
+  events: [appsRelations.events.listWorkerAccess],
+  attendance: [appsRelations.attendance.listWorkerAccess],
+};

@@ -10,18 +10,14 @@ import {
 import { TeamsService } from './teams.service';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
-import { PersonService } from '../person/person.service';
 
 @Controller('teams')
 export class TeamsController {
-  constructor(
-    private readonly teamsService: TeamsService,
-    private readonly personService: PersonService,
-  ) {}
+  constructor(private readonly teamsService: TeamsService) {}
 
   @Post()
-  create(@Body() createTeamDto: CreateTeamDto) {
-    return this.personService.createTeamMember(createTeamDto);
+  async create(@Body() createTeamDto: CreateTeamDto) {
+    return this.teamsService.create(createTeamDto);
   }
 
   @Get()
@@ -30,8 +26,8 @@ export class TeamsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.teamsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return this.teamsService.findOne(id);
   }
 
   @Patch(':id')

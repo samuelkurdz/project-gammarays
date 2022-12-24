@@ -1,22 +1,30 @@
 import { Injectable } from '@nestjs/common';
+import { hashPassword } from 'src/global';
 import { PersonService } from '../person/person.service';
-import { CreateTeamDto } from './dto/create-team.dto';
+import {
+  CreateTeamDto,
+  createTeamMemberDefaultApps,
+} from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
 
 @Injectable()
 export class TeamsService {
   constructor(private readonly personService: PersonService) {}
 
-  create(createTeamDto: CreateTeamDto) {
-    return 'This action adds a new team';
+  async create(createTeamDto: CreateTeamDto) {
+    const { password } = createTeamDto;
+    const hashedpassword = await hashPassword(password);
+    createTeamDto.apps = createTeamMemberDefaultApps;
+    createTeamDto.password = hashedpassword;
+    return this.personService.createPerson(false, createTeamDto);
   }
 
   async findAll() {
-    return await this.personService.findPersons(false);
+    return this.personService.findPersons(false);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} team`;
+  findOne(id: string) {
+    return this.personService.findById(id);
   }
 
   update(id: number, updateTeamDto: UpdateTeamDto) {

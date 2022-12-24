@@ -1,22 +1,30 @@
 import { Injectable } from '@nestjs/common';
+import { hashPassword } from 'src/global';
 import { PersonService } from '../person/person.service';
-import { CreateWorkerDto } from './dto/create-worker.dto';
+import {
+  createWorkerDefaultApps,
+  CreateWorkerDto,
+} from './dto/create-worker.dto';
 import { UpdateWorkerDto } from './dto/update-worker.dto';
 
 @Injectable()
 export class WorkersService {
   constructor(private readonly personService: PersonService) {}
 
-  create(createWorkerDto: CreateWorkerDto) {
-    return 'This action adds a new worker';
+  async create(createWorkerDto: CreateWorkerDto) {
+    const { password } = createWorkerDto;
+    const hashedpassword = await hashPassword(password);
+    createWorkerDto.apps = createWorkerDefaultApps;
+    createWorkerDto.password = hashedpassword;
+    return this.personService.createPerson(true, createWorkerDto);
   }
 
   async findAll() {
     return await this.personService.findPersons(true);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} worker`;
+  findOne(id: string) {
+    return this.personService.findById(id);
   }
 
   update(id: number, updateWorkerDto: UpdateWorkerDto) {

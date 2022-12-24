@@ -1,5 +1,5 @@
 export interface Apps {
-  teams: string[];
+  teams?: string[];
   events: string[];
   workers: string[];
   attendance: string[];
