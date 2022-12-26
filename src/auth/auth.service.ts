@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PersonService } from 'src/rest/person/person.service';
 import { comparePassword } from 'src/global/utils';
-import { Token } from 'src/global';
+import { ILoggedInUser } from 'src/global';
 import { Person, PersonDocument } from 'src/rest/person/person.schema';
 
 @Injectable()
@@ -23,12 +23,12 @@ export class AuthService {
   }
 
   isTokenValid(token: string) {
-    return this._jwtService.verifyAsync<Token>(token);
+    return this._jwtService.verifyAsync<ILoggedInUser>(token);
   }
 
   async login(person: PersonDocument) {
     const { _id, email, isWorker, company, apps } = person;
-    const payload: Token = {
+    const payload: ILoggedInUser = {
       _id: _id.toString(),
       apps,
       email,

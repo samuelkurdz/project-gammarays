@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Types, ObjectId } from 'mongoose';
+import { HydratedDocument, ObjectId, Types } from 'mongoose';
 import { Apps } from 'src/global';
 
 export type PersonDocument = HydratedDocument<Person>;
@@ -37,7 +37,7 @@ export class Person {
   isWorker: boolean;
 
   @Prop({ required: true, ref: 'Company', type: Types.ObjectId })
-  company: Types.ObjectId;
+  company: ObjectId;
 
   @Prop({
     type: AppSchema,

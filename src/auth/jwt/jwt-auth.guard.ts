@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
-import { Token } from 'src/global';
+import { ILoggedInUser } from 'src/global';
 import { AuthService } from '../auth.service';
 
 // export const getClient = <T = Client>(ctx: ExecutionContext): T => {
@@ -30,6 +30,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
     const request = ctx.switchToHttp().getRequest();
+    if (!request.headers.authorization) throw new UnauthorizedException();
     const jwt = request.headers.authorization.replace('Bearer ', '');
     try {
       const { _id, apps, company, email, isWorker } =

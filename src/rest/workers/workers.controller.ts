@@ -12,7 +12,7 @@ import { WorkersService } from './workers.service';
 import { CreateWorkerDto } from './dto/create-worker.dto';
 import { UpdateWorkerDto } from './dto/update-worker.dto';
 import { JwtAuthGuard } from 'src/auth';
-import { LoggedInUser, Token } from 'src/global';
+import { LoggedInUser, ILoggedInUser } from 'src/global';
 
 @Controller('workers')
 export class WorkersController {
@@ -22,7 +22,7 @@ export class WorkersController {
   @Post()
   create(
     @Body() createWorkerDto: CreateWorkerDto,
-    @LoggedInUser() user: Token,
+    @LoggedInUser() user: ILoggedInUser,
   ) {
     console.log(user);
     return this.workersService.create(createWorkerDto);

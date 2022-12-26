@@ -34,14 +34,14 @@ export class PersonService {
         .where('company')
         .equals(companyId)
         .select('-password')
-        .populate('company', '-officialEmail -password -apps')
+        .populate('company', '_id officialEmail companyName category logo')
         .lean()
         .exec();
     }
     return this.personModel
       .find({ isWorker: isWorker })
       .select('-password')
-      .populate('company', '-officialEmail -password -apps')
+      .populate('company', '_id officialEmail companyName category logo')
       .lean()
       .exec();
   }

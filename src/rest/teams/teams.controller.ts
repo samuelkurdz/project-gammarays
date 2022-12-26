@@ -12,7 +12,7 @@ import {
 import { TeamsService } from './teams.service';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
-import { LoggedInUser, Token } from 'src/global';
+import { LoggedInUser, ILoggedInUser } from 'src/global';
 import { JwtAuthGuard } from 'src/auth';
 import {
   AbilityFactory,
@@ -31,7 +31,7 @@ export class TeamsController {
   @Post()
   async create(
     @Body() createTeamDto: CreateTeamDto,
-    @LoggedInUser() user: Token,
+    @LoggedInUser() user: ILoggedInUser,
   ) {
     console.log(user);
     return this.teamsService.create(createTeamDto);
@@ -39,18 +39,16 @@ export class TeamsController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll(@LoggedInUser() user: Token) {
-    // console.log(user);
+  async findAll(@LoggedInUser() user: ILoggedInUser) {
     const ability = this.abilityFactory.defineAbility(user.apps);
     const isAllowed = ability.can(Actions.Read, Subjects.Teams);
-    // console.log(isAllowed);
     if (!isAllowed) throw new ForbiddenException('insufficient authorization');
     return this.teamsService.findAll(user.company);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async findOne(@Param('id') id: string, @LoggedInUser() user: Token) {
+  async findOne(@Param('id') id: string, @LoggedInUser() user: ILoggedInUser) {
     console.log(user);
     return this.teamsService.findOne(id);
   }

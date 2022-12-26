@@ -1,6 +1,6 @@
 import { Apps } from './apps.interface';
 
-export interface Token {
+export interface ILoggedInUser {
   _id: string;
   email: string;
   isWorker: boolean;
